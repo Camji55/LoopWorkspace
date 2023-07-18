@@ -71,10 +71,10 @@
       location = "group:AmplitudeService/AmplitudeService.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:LogglyService/LogglyService.xcodeproj">
+      location = "group:MixpanelService/MixpanelService.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:TidepoolKit/TidepoolKit.xcodeproj">
+      location = "group:LogglyService/LogglyService.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:TidepoolService/TidepoolService.xcodeproj">
@@ -102,6 +102,9 @@
    </FileRef>
    <FileRef
       location = "group:G7SensorKit/G7SensorKit.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:LibreTransmitter/LibreTransmitter.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:LoopSupport/LoopSupport.xcodeproj">
