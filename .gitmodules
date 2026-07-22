@@ -73,3 +73,6 @@
 	path = MedtrumKit
 	url = https://github.com/LoopKit/MedtrumKit.git
 	branch = next-dev
+[submodule "HomeAssistantService"]
+	path = HomeAssistantService
+	url = https://github.com/Camji55/loop-homeassistant-service.git
