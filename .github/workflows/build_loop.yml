@@ -2,6 +2,11 @@ name: 4. Build Loop
 run-name: Build Loop (${{ github.ref_name }})
 on:
   workflow_dispatch:
+  push:
+    # Build automatically when commits (e.g. a merged PR) land on these branches
+    branches:
+      - fpu-meal-entries
+      - fpu-calculator
   schedule:
     # Check for updates every Sunday
     #   Later logic builds if there are updates or if it is the 2nd Sunday of the month
@@ -94,9 +99,12 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
 
-      # This syncs any target branch to upstream branch of the same name
+      # This syncs any target branch to upstream branch of the same name.
+      # Scheduled runs only: this feature branch has no upstream counterpart, so
+      # syncing on push or manual dispatch would fail.
       - name: Sync upstream changes
         if: | # do not run the upstream sync action on the upstream repository
+          github.event_name == 'schedule' &&
           steps.workflow-permission.outputs.has_permission == 'true' &&
           vars.SCHEDULED_SYNC != 'false' && github.repository_owner != 'LoopKit'
         id: sync
@@ -158,6 +166,7 @@ jobs:
       secrets: inherit
       if: |
         github.event_name == 'workflow_dispatch' ||
+          github.event_name == 'push' ||
           (vars.SCHEDULED_BUILD != 'false' && needs.check_status.outputs.IS_SECOND_IN_MONTH == 'true') ||
           (vars.SCHEDULED_SYNC != 'false' && needs.check_status.outputs.NEW_COMMITS == 'true' )
 
@@ -169,8 +178,9 @@ jobs:
     permissions:
       contents: write
     if:
-      | # builds with manual start; if scheduled: once a month or when new commits are found
+      | # builds with manual start or a push to a build branch; if scheduled: once a month or when new commits are found
       github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'push' ||
         (vars.SCHEDULED_BUILD != 'false' && needs.check_status.outputs.IS_SECOND_IN_MONTH == 'true') ||
         (vars.SCHEDULED_SYNC != 'false' && needs.check_status.outputs.NEW_COMMITS == 'true' )
     steps:
